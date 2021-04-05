@@ -14,7 +14,7 @@ protocol HomeViewModelDelegate: AnyObject {
 final class HomeViewModel {
     
     let title = NSLocalizedString("common.appTitle", comment: "")
-    let isContactsPermissionGranted = Observable<Bool>()
+    let isContactsPermissionGranted = Observable<PermissionState>()
     let isContactsCountUpdated = Observable<Int>()
     
     weak var delegate: HomeViewModelDelegate?
@@ -26,11 +26,12 @@ final class HomeViewModel {
     init(contactsPermissionRequester: PermissionRequestable, addressBook: AddressBookProvider) {
         self.contactsPermissionRequester = contactsPermissionRequester
         self.addressBook = addressBook
+        isContactsPermissionGranted.value = contactsPermissionRequester.isPermissionGranted
     }
     
     func requestContactsPermission() {
         contactsPermissionRequester.requestPermission(completionHandler: { [weak self] isGranted, _ in
-            self?.isContactsPermissionGranted.value = isGranted
+            self?.isContactsPermissionGranted.value = PermissionState(userResponse: isGranted)
         })
     }
     

@@ -44,10 +44,12 @@ final class HomeViewController: UIViewController, StoryboardInstanceable {
             guard let granted = isGranted else {
                 return
             }
-            guard granted == true else {
+            
+            guard granted == .allowed else {
                 self?.setUpBackgroundView()
                 return
             }
+            
             self?.viewModel.getContacts()
         }
         viewModel.isContactsCountUpdated.bind { [weak self] _ in
