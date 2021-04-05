@@ -54,7 +54,7 @@ final class HomeViewController: UIViewController, StoryboardInstanceable {
                 self?.setUpBackgroundView()
                 
             case .unknown:
-                break
+                self?.setUpRequestPermissionBackgroundView()
             }
         }
         
@@ -66,6 +66,12 @@ final class HomeViewController: UIViewController, StoryboardInstanceable {
     private func setUpBackgroundView() {
         let view = BackgroundView.instantiate()
         view.viewModel = viewModel.getBackgroundViewModel()
+        collectionView.backgroundView = view
+    }
+    
+    private func setUpRequestPermissionBackgroundView() {
+        let view = BackgroundView.instantiate()
+        view.viewModel = viewModel.getRequestBackgroundViewModel()
         collectionView.backgroundView = view
     }
 }
