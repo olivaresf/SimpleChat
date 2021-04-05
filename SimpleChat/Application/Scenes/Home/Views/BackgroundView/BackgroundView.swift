@@ -28,6 +28,15 @@ final class BackgroundView: UIView {
         super.awakeFromNib()
         setUpTitleLabel()
         setUpSubtitleLabel()
+        
+        isUserInteractionEnabled = true
+        let tapRecognizer = UITapGestureRecognizer(target: self,
+                                                   action: #selector(didReceiveTap))
+        addGestureRecognizer(tapRecognizer)
+    }
+    
+    @objc private func didReceiveTap() {
+        viewModel?.didReceiveTap()
     }
     
     private func setUpTitleLabel() {
