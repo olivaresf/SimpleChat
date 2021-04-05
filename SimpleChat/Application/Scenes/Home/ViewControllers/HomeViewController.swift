@@ -21,7 +21,6 @@ final class HomeViewController: UIViewController, StoryboardInstanceable {
         setUpNavigationBar()
         setUpCollectionView()
         bind()
-        viewModel.requestContactsPermission()
     }
     
     private func setUpNavigationBar() {
