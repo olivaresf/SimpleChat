@@ -49,6 +49,7 @@ final class HomeViewController: UIViewController, StoryboardInstanceable {
             
             case .allowed:
                 self?.viewModel.getContacts()
+                self?.collectionView.backgroundView = nil
                 
             case .denied:
                 self?.setUpBackgroundView()
