@@ -21,7 +21,6 @@ final class HomeViewController: UIViewController, StoryboardInstanceable {
         setUpNavigationBar()
         setUpCollectionView()
         bind()
-        viewModel.requestContactsPermission()
     }
     
     private func setUpNavigationBar() {
@@ -45,12 +44,21 @@ final class HomeViewController: UIViewController, StoryboardInstanceable {
             guard let granted = isGranted else {
                 return
             }
-            guard granted == true else {
+            
+            switch granted {
+            
+            case .allowed:
+                self?.viewModel.getContacts()
+                self?.collectionView.backgroundView = nil
+                
+            case .denied:
                 self?.setUpBackgroundView()
-                return
+                
+            case .unknown:
+                self?.setUpRequestPermissionBackgroundView()
             }
-            self?.viewModel.getContacts()
         }
+        
         viewModel.isContactsCountUpdated.bind { [weak self] _ in
             self?.collectionView.reloadData()
         }
@@ -59,6 +67,12 @@ final class HomeViewController: UIViewController, StoryboardInstanceable {
     private func setUpBackgroundView() {
         let view = BackgroundView.instantiate()
         view.viewModel = viewModel.getBackgroundViewModel()
+        collectionView.backgroundView = view
+    }
+    
+    private func setUpRequestPermissionBackgroundView() {
+        let view = BackgroundView.instantiate()
+        view.viewModel = viewModel.getRequestBackgroundViewModel()
         collectionView.backgroundView = view
     }
 }

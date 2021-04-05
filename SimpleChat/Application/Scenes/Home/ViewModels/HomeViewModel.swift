@@ -12,8 +12,9 @@ protocol HomeViewModelDelegate: AnyObject {
 }
 
 final class HomeViewModel {
+    
     let title = NSLocalizedString("common.appTitle", comment: "")
-    let isContactsPermissionGranted = Observable<Bool>()
+    let isContactsPermissionGranted = Observable<PermissionState>()
     let isContactsCountUpdated = Observable<Int>()
     
     weak var delegate: HomeViewModelDelegate?
@@ -25,11 +26,12 @@ final class HomeViewModel {
     init(contactsPermissionRequester: PermissionRequestable, addressBook: AddressBookProvider) {
         self.contactsPermissionRequester = contactsPermissionRequester
         self.addressBook = addressBook
+        isContactsPermissionGranted.value = contactsPermissionRequester.isPermissionGranted
     }
     
     func requestContactsPermission() {
         contactsPermissionRequester.requestPermission(completionHandler: { [weak self] isGranted, _ in
-            self?.isContactsPermissionGranted.value = isGranted
+            self?.isContactsPermissionGranted.value = PermissionState(userResponse: isGranted)
         })
     }
     
@@ -53,8 +55,22 @@ final class HomeViewModel {
         delegate?.didSelectContact(item.asContact())
     }
     
+    func getRequestBackgroundViewModel() -> BackgroundViewViewModel {
+        return BackgroundViewViewModel(title: NSLocalizedString("Allow access to your Contacts", comment: ""),
+                                       subtitle: NSLocalizedString("Tap here to allow access to your contacts to continue chatting.", comment: ""),
+                                       delegate: self)
+    }
+    
     func getBackgroundViewModel() -> BackgroundViewViewModel {
         return BackgroundViewViewModel(title: NSLocalizedString("home.contacts.accessNotAllowed.title", comment: ""),
-                                   subtitle: NSLocalizedString("home.contacts.accessNotAllowed.description", comment: ""))
+                                       subtitle: NSLocalizedString("home.contacts.accessNotAllowed.description", comment: ""),
+                                       delegate: self)
+    }
+}
+
+extension HomeViewModel: BackgroundViewViewModelDelegate {
+    
+    func userTappedBackgroundView() {
+        requestContactsPermission()
     }
 }
