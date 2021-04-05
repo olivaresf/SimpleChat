@@ -57,11 +57,20 @@ final class HomeViewModel {
     
     func getRequestBackgroundViewModel() -> BackgroundViewViewModel {
         return BackgroundViewViewModel(title: NSLocalizedString("Allow access to your Contacts", comment: ""),
-                                   subtitle: NSLocalizedString("Tap here to allow access to your contacts to continue chatting.", comment: ""))
+                                       subtitle: NSLocalizedString("Tap here to allow access to your contacts to continue chatting.", comment: ""),
+                                       delegate: self)
     }
     
     func getBackgroundViewModel() -> BackgroundViewViewModel {
         return BackgroundViewViewModel(title: NSLocalizedString("home.contacts.accessNotAllowed.title", comment: ""),
-                                   subtitle: NSLocalizedString("home.contacts.accessNotAllowed.description", comment: ""))
+                                       subtitle: NSLocalizedString("home.contacts.accessNotAllowed.description", comment: ""),
+                                       delegate: self)
+    }
+}
+
+extension HomeViewModel: BackgroundViewViewModelDelegate {
+    
+    func userTappedBackgroundView() {
+        
     }
 }

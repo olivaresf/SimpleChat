@@ -7,7 +7,16 @@
 
 import Foundation
 
-struct BackgroundViewViewModel: Equatable {
+protocol BackgroundViewViewModelDelegate: class {
+    func userTappedBackgroundView()
+}
+
+struct BackgroundViewViewModel {
     let title: String
     let subtitle: String
+    weak var delegate: BackgroundViewViewModelDelegate?
+    
+    func didReceiveTap() {
+        delegate?.userTappedBackgroundView()
+    }
 }
