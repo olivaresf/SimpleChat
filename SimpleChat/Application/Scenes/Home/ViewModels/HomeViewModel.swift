@@ -12,6 +12,7 @@ protocol HomeViewModelDelegate: AnyObject {
 }
 
 final class HomeViewModel {
+    
     let title = NSLocalizedString("common.appTitle", comment: "")
     let isContactsPermissionGranted = Observable<Bool>()
     let isContactsCountUpdated = Observable<Int>()

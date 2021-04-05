@@ -25,14 +25,19 @@ final class ContactsPermissionRequester: PermissionRequestable {
         }
     }
     
-    var isPermissionGranted: Bool {
+    var isPermissionGranted: PermissionState {
+        
         switch contactStoreType.authorizationStatus(for: contactStoreEntityType) {
+        
         case .authorized:
-            return true
+            return .allowed
         case .denied,
-             .notDetermined,
              .restricted:
-            return false
+            return .denied
+            
+        case .notDetermined:
+            return .unknown
+            
         @unknown default:
             fatalError("Undefined status for CNContactStore")
         }
