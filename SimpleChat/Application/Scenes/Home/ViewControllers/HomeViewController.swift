@@ -45,13 +45,19 @@ final class HomeViewController: UIViewController, StoryboardInstanceable {
                 return
             }
             
-            guard granted == .allowed else {
-                self?.setUpBackgroundView()
-                return
-            }
+            switch granted {
             
-            self?.viewModel.getContacts()
+            case .allowed:
+                self?.viewModel.getContacts()
+                
+            case .denied:
+                self?.setUpBackgroundView()
+                
+            case .unknown:
+                break
+            }
         }
+        
         viewModel.isContactsCountUpdated.bind { [weak self] _ in
             self?.collectionView.reloadData()
         }
