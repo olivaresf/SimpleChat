@@ -71,6 +71,6 @@ final class HomeViewModel {
 extension HomeViewModel: BackgroundViewViewModelDelegate {
     
     func userTappedBackgroundView() {
-        
+        requestContactsPermission()
     }
 }
